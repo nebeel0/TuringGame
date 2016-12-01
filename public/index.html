@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="/stylesheets/style.css" rel="stylesheet" type="text/css"/>
+
+<title>Travel Chat</title>
+<!-- <title>Simple Travel Chat</title> -->
+</head>
+<body>
+  <div class="mainContent">
+    <p>
+      <h1>Chat About Travel</h1>
+    </p>
+   
+    <p>
+      <b>Example Questions:</b>
+    </p>
+  <ul>
+    <li>
+      <p>"What should I do in <i>X</i>?"</p>
+    </li>
+    <li>
+      <p>"Where should I eat in <i>X</i>?"</p>
+    </li>
+    <li>
+      <p>"Is it safe to travel to <i>X</i>?"</p>
+    </li>
+    <li>
+      <p>"Is there a ferry from <i>X</i> to <i>Y</i>?"</p>
+    </li>
+    <li>
+      <p>"Can I bring my <i>X</i> through airport security?"</p>
+    </li>
+  </ul>
+      
+  <div id="output" ></div>
+    <div class="askContent">
+      <input type="text" id="question" class="textbox" value=""/>
+      <input type="button" class="askButton" value="ASK" onclick="ask()"/>
+    </div>
+  </div>
+
+ 
+<script src="jquery/[INSERT JQUERY FILENAME HERE]"></script>
+<script>
+  // Set focus to the question box
+  document.getElementById("question").focus();
+
+  // Pressing Enter in the question box will ask the question
+  $("#question").keyup(function(event){
+    if(event.keyCode == 13){
+      ask();
+    }
+  });
+
+  // Displays a formatted question or answer to the page
+  function showOutput(classType, output){
+	  var elementSeparator = document.createElement('div');
+      elementSeparator.setAttribute('class',classType);
+      elementSeparator.innerHTML = output;                		
+      document.getElementById('output').appendChild(elementSeparator);
+      
+      var elementSeparator = document.createElement('div');
+      elementSeparator.setAttribute('class','messageSeparator');
+      elementSeparator.innerHTML = '&nbsp;'
+      document.getElementById('output').appendChild(elementSeparator);      
+  }
+  
+  // Posts a question to the url: /question and process the answer
+  function ask() { 
+	  
+    var myQuestion = document.getElementById('question').value; 
+	 
+    var questionEntity = {
+      'question' : myQuestion
+    };
+	
+    showOutput('questionContent', myQuestion);
+    $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
+    	
+    document.getElementById('question').value = '';
+      
+    $.ajax({
+      type : 'POST',
+      data : questionEntity,
+      dataType : 'json',
+      url : '/question',
+      success : function(r, msg) {
+        if (r.answer !== undefined) {
+          showOutput('answerContent', r.answer); 
+          document.getElementById('question').focus();		
+		
+          $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
+
+        } else {
+        	console.log('The response back was undefined');
+        	showOutput('answerContent', 'Sorry, I have no response to your question.');
+        }
+        },
+          error : function(r, msg, e) {            
+            var errorText = '';
+            if (r.responseText) {
+              errorText = e + ' ' + r.responseText;
+            } else {
+              errorText = e;
+            }            	
+			console.log(errorText);
+			showOutput('answerContent', 'Sorry, I am unable to respond to your question.');
+          }
+    });	
+  }
+</script>
+</body>
+</html>
