@@ -16,21 +16,16 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public_username')));
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.use("/", express.static(__dirname + '/public'));
+app.use("/", express.static(__dirname + '/public_username'));
 
-// Travel Chat Demo AI Type
-// Note: comment out the undesired AI
-// Method 1: Simple AI
-//var simpleAI = require('./simpleAI/simpleAI');
-//app.post('/question', simpleAI.question);
-// Method 2: Watson AI
+// Simple AI Type
 var simpleAI = require('./simpleAI/simpleAI');
 app.post('/question', simpleAI.question);
 
