@@ -31,8 +31,8 @@ app.use("/", express.static(__dirname + '/public'));
 //var simpleAI = require('./simpleAI/simpleAI');
 //app.post('/question', simpleAI.question);
 // Method 2: Watson AI
-var watsonAI = require('./watsonAI/watsonAI');
-app.post('/question', watsonAI.question);
+var simpleAI = require('./simpleAI/simpleAI');
+app.post('/question', simpleAI.question);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
