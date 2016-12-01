@@ -8,6 +8,7 @@ var express = require('express')
   , path = require('path');
 
 var app = express();
+var pathname = __dirname + '/public/';
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -16,14 +17,26 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public_username')));
+app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next){
+	console.log("/" + req.method);
+	next();
+})
+
+app.get("/", function (req,res){
+	res.sendfile(pathname + "index.html");
+})
+app.get("/chatService", function (req,res){
+	res.sendfile(pathname + "chatService.html");
+})
+//app.get("/", express.static(__dirname + '/public_username'));
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.use("/", express.static(__dirname + '/public_username'));
+
 
 // Simple AI Type
 var simpleAI = require('./simpleAI/simpleAI');
