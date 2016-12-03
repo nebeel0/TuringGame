@@ -11,6 +11,9 @@ var app = express();
 var pathname = __dirname + '/public/';
 var appServer = http.createServer(app);
 var io = require('socket.io')(appServer);
+var clients = [];
+var people = {};
+var rooms = {};
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -40,7 +43,7 @@ io.on('connection', function(socket){
       });
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
-    io.emit('chat message', msg);
+    socket.broadcast.emit('chat message', msg);
   });
 });
  
