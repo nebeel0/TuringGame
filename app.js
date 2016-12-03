@@ -9,6 +9,8 @@ var express = require('express')
 
 var app = express();
 var pathname = __dirname + '/public/';
+var appServer = http.createServer(app);
+var io = require('socket.io')(appServer);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,6 +32,19 @@ app.get("/", function (req,res){
 app.get("/chatService", function (req,res){
 	res.sendfile(pathname + "chatService.html");
 })
+ 
+io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+      });
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+    io.emit('chat message', msg);
+  });
+});
+ 
+
 //app.get("/", express.static(__dirname + '/public_username'));
 // development only
 if ('development' == app.get('env')) {
@@ -42,6 +57,6 @@ if ('development' == app.get('env')) {
 var simpleAI = require('./simpleAI/simpleAI');
 app.post('/question', simpleAI.question);
 
-http.createServer(app).listen(app.get('port'), function(){
+appServer.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });

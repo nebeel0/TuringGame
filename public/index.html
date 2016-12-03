@@ -16,13 +16,11 @@
     <p>
       <h1>The Turing Test Game</h1>
     </p>
-   
-   
       
   <div id="output" ></div>
     <div class="askContent">
       <input type="text" id="question" class="textbox" value="Username"/>
-      <input type="button" class="askButton" value="ENTER" onclick="enter()"/>
+      <input type="button" class="enterButton" value="ENTER" onclick="enter()"/>
     </div>
   </div>
 
@@ -54,70 +52,7 @@
   
   // Posts a question to the url: /question and process the answer
   function enter() { 
-	  
-    /* var myQuestion = document.getElementById('question').value; 
-	 
-    var questionEntity = {
-      'question' : myQuestion
-    };
-	
-    showOutput('questionContent', myQuestion);
-    $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
-    	
-    document.getElementById('question').value = '';
-      
-    $.ajax({
-      type : 'POST',
-      data : questionEntity,
-      dataType : 'json',
-      url : '/question',
-      success : function(r, msg) {
-        if (r.answer !== undefined) {
-          showOutput('answerContent', r.answer); 
-          document.getElementById('question').focus();		
-		
-          $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
-
-        } else {
-        	console.log('The response back was undefined');
-        	showOutput('answerContent', 'Sorry, I have no response to your question.');
-        }
-        },
-          error : function(r, msg, e) {            
-            var errorText = '';
-            if (r.responseText) {
-              errorText = e + ' ' + r.responseText;
-            } else {
-              errorText = e;
-            }            	
-			console.log(errorText);
-			showOutput('answerContent', 'Sorry, I am unable to respond to your question.');
-          }
-    });	 */
-    var express = require('express')
-  , http = require('http')
-  , path = require('path');
-    
-    var app = express();
-	
-	// all environments
-	app.set('port', process.env.PORT || 3000);
-	app.use(express.favicon());
-	app.use(express.logger('dev'));
-	app.use(express.bodyParser());
-	app.use(express.methodOverride());
-	app.use(app.router);
-	app.use(express.static(path.join(__dirname+'/../', 'public_chatService')));
-	
-	app.use("/", express.static(__dirname + '+/../public_chatService'));
-
-	// Simple AI Type
-	var simpleAI = require('./simpleAI/simpleAI');
-	app.post('/question', simpleAI.question);
-	
-	http.createServer(app).listen(app.get('port'), function(){
-	  console.log('Express server listening on port ' + app.get('port'));
-	});
+	document.location.href = "chatService.html"
 		
   }
 </script>

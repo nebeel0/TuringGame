@@ -11,6 +11,7 @@
 <title>The Turing Test Game</title>
 <!-- <title>Simple Turing Test game</title> -->
 </head>
+
 <body>
   <div class="mainContent">
     <p>
@@ -32,10 +33,17 @@
       <input type="button" class="askButton" value="ASK" onclick="ask()"/>
     </div>
   </div>
-
- 
-<script src="jquery/jquery-3.1.1.min.js"></script>
-<script>
+	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+	<script src="jquery/jquery-3.1.1.min.js"></script>
+  <script>
+    var socket = io();
+    socket.on('chat message', function(msg){
+      showOutput('questionContent', msg);
+      $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+      document.getElementById('question').value = '';
+    });
+  </script>
+	<script>
   // Set focus to the question box
   document.getElementById("question").focus();
 
@@ -63,16 +71,13 @@
   function ask() { 
 	  
     var myQuestion = document.getElementById('question').value; 
-	 
+	  socket.emit('chat message', myQuestion);
     var questionEntity = {
       'question' : myQuestion
     };
 	
-    showOutput('questionContent', myQuestion);
-    $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
-    	
-    document.getElementById('question').value = '';
-      
+
+    /*  
     $.ajax({
       type : 'POST',
       data : questionEntity,
@@ -101,7 +106,9 @@
 			showOutput('answerContent', 'Sorry, I am unable to respond to your question.');
           }
     });	
+    */
   }
 </script>
+
 </body>
 </html>
