@@ -47,7 +47,7 @@ io.on('connection', function(socket){
       socket.broadcast.emit('chat message', msg);
     });
 });
-
+ 
 
 //app.get("/", express.static(__dirname + '/public_username'));
 // development only

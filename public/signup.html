@@ -6,43 +6,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<link href="/stylesheets/userAccount2.css" rel="stylesheet" type="text/css"/>
+<link href="/stylesheets/userAccount.css" rel="stylesheet" type="text/css"/>
 
-<title>the turing test game</title>
+<title>The Turing Test Game</title>
 <!-- <title>Simple game</title> -->
 </head>
 <body>
-
-  
-  <div class="login-page">
-      <h1>The Turing Test Game</h1>
-  <div class="form">
-    <form class="register-form">
-      <input type="text" id="username_signup" placeholder="name"/>
-      <input type="password" id="password_signup" placeholder="password"/>
-      <input type="password" id="confirm_signup" placeholder="confirm password"/>
-      <input type="button" class = "askButton" value="create" onclick="enter()"/>      
-      <p class="message">Already registered? <a href="#">Sign In</a></p>
-    </form>
-    <form class="login-form">
-      <input type="text" id="username_login" placeholder="username"/>
-      <input type="password" id="password_login" placeholder="password"/>
-      <input type="button" class = "askButton" value="login" onclick="enter()"/>      
-      <p class="message">Not registered? <a href="#">Create an account</a></p>
-    </form>
+  <div class="mainContent">
+    <p>
+      <h1>Create an account</h1>
+    </p>
+      
+  <div id="output" ></div>
+    <div class="askContent">
+      <input type="text" id="username" class="textbox" placeholder="Username"/>
+    </div>
+    <div class="askContent">
+      <input type="text" id="password" class="textbox" placeholder="Password"/>
+    </div>
+    <div class="askContent">
+      <input type="text" id="password" class="textbox" placeholder="Confirm Password"/>
+    </div>
+    <div class="askContent">
+      <input type="button" class="askButton" value="SIGNUP" onclick="signup()"/>
+    </div>
   </div>
-
-  </div>
-
-
 
  
 <script src="jquery/jquery-3.1.1.min.js"></script>
-<script>
-  $('.message a').click(function(){
-     $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-  });
-</script>
 <script>
   // Set focus to the question box
   document.getElementById("question").focus();
