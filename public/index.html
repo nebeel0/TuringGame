@@ -6,34 +6,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<link href="/stylesheets/userAccount2.css" rel="stylesheet" type="text/css"/>
+<link href="/stylesheets/userAccount.css" rel="stylesheet" type="text/css"/>
 
 <title>the turing test game</title>
 <!-- <title>Simple game</title> -->
 </head>
 <body>
-
-  
   <div class="login-page">
       <h1>The Turing Test Game</h1>
-  <div class="form">
-    <form class="register-form">
-      <input type="text" id="username_signup" placeholder="name"/>
-      <input type="password" id="password_signup" placeholder="password"/>
-      <input type="password" id="confirm_signup" placeholder="confirm password"/>
-      <input type="button" class = "askButton" value="create" onclick="enter()"/>      
-      <p class="message">Already registered? <a href="#">Sign In</a></p>
-    </form>
-    <form class="login-form">
-      <input type="text" id="username_login" placeholder="username"/>
-      <input type="password" id="password_login" placeholder="password"/>
-      <input type="button" class = "askButton" value="login" onclick="enter()"/>      
-      <p class="message">Not registered? <a href="#">Create an account</a></p>
-    </form>
+    <div class="form">
+      <form method = "post" class="register-form">
+        <input type="text" id="username_signup" placeholder="name"/>
+        <input type="password" id="password_signup" placeholder="password"/>
+        <input type="password" id="confirm_signup" placeholder="confirm password"/>
+        <input type="button" class = "askButton" value="create" onclick="create()"/>      
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+      </form>
+      <form method = "post" class="login-form">
+        <input type="text" id="username_login" placeholder="username"/>
+        <input type="password" id="password_login" placeholder="password"/>
+        <input type="button" class = "askButton" value="login" onclick="enter()"/>      
+        <p class="message">Not registered? <a href="#">Create an account</a></p>
+      </form>
+    </div>
   </div>
-
-  </div>
-
 
 
  
@@ -68,9 +64,12 @@
   }
   
   // Posts a question to the url: /question and process the answer
-  function enter() { 
-	document.location.href = "chatService.html"
-		
+  function enter() {
+	 //document.location.href = "chatService.html";
+  }
+  function create() {
+
+    //document.location.href = "index.html";
   }
 </script>
 </body>
