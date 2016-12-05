@@ -11,7 +11,37 @@ a {
 h1 {
   color: #00b299;
 }
+#center {
+  transform-style: preserve-3d;
+  text-align: center;
+  position: relative;
+  text-shadow: 1px 1px 5px black;
+    color: #CCC;
 
+}
+#score {
+  transform-style: preserve-3d;
+  font-size:20px;
+  text-shadow: 1px 1px 5px black;
+    color: #CCC;
+
+}
+#tag {
+  transform-style: preserve-3d;
+  display: none;
+  position: relative;
+  font-size:10px;
+  text-shadow: 1px 1px 5px black;
+    color: #CCC;
+
+}
+#title{
+  transform-style: preserve-3d;
+  font-size:20px;
+  text-shadow: 1px 1px 5px black;
+    color: #CCC;
+
+}
 .timer {
   font-size: 2.5em;
   padding: 10px;
