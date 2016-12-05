@@ -65,11 +65,23 @@
   </script>
   <script>
     var timer = 60;
-
+    var warningMessage = "Ejecting in 10."
+    var goodByeMessage = "Ejecting."
     var interval = setInterval(function() {
         timer--;
         $('.timer').text(timer);
-        if (timer === 0) clearInterval(interval);
+        if (timer === 10){
+          showOutput('lostContent', warningMessage);
+          $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+          document.getElementById('question').value = ''; 
+        }
+        if (timer < 0){
+          clearInterval(interval);
+          showOutput('lostContent', goodByeMessage);
+          $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+          document.getElementById('question').value = ''; 
+          document.location.href = "logout";
+        }
     }, 500);
   </script>
   <script>
