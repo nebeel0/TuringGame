@@ -48,8 +48,22 @@ exports.postLogin = (req, res, next) => {
  * Log out.
  */
 exports.logout = (req, res) => {
-  req.logout();
-  res.redirect('/login');
+  if(!req.user){
+    res.redirect('/login');
+  }
+  else{
+    User.findById(req.user.id, (err, user) => {
+      if (err) { return next(err); }
+      user.score = req.body.score || 60;
+      user.save((err) => {
+        if (err) {
+          return next(err);
+        }
+        req.logout();
+        res.redirect('/login');
+      });
+    });
+  }
 };
 
 /**

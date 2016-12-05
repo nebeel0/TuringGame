@@ -73,43 +73,25 @@ app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
-app.use((req, res, next) => {
-  // After successful login, redirect back to the intended page
-  if (!req.user &&
-      req.path !== '/login' &&
-      req.path !== '/signup' &&
-      !req.path.match(/^\/auth/) &&
-      !req.path.match(/\./)) {
-    req.session.returnTo = req.path;
-  } else if (req.user &&
-      req.path == '/account') {
-    req.session.returnTo = req.path;
-  }
-  next();
-});
 app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-app.use(function (req, res, next){
-	console.log("/" + req.method);
-	next();
-})
-*/
-
-/*
-app.get("/", function (req,res){
-  res.sendfile(pathname + "chatService.html");
-})
-*/
-/**
- * Primary app routes.
- */
-
 app.get("/chatService", function (req,res){
-  res.sendfile(pathname + "chatService.html");
+  if (!req.user &&
+      req.path !== '/login'){
+    // if user is not logged-in redirect back to login page //
+    res.redirect('/login');
+  }else{
+    res.redirect('/');
+  }
 })
 app.get("/", function (req,res){
-  res.sendfile(pathname + "chatService.html");
+    if (!req.user &&
+      req.path !== '/login'){
+    // if user is not logged-in redirect back to login page //
+    res.redirect('/login');
+  }else{
+    res.sendfile(pathname + "chatService.html");
+  }
 })
 
 app.get('/login', userController.getLogin);
