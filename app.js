@@ -127,6 +127,14 @@ io.on('connection', function(socket){
       console.log('message: ' + msg);
       socket.broadcast.emit('chat message', msg);
     });
+    socket.on('bot check', function(msg){
+      console.log('bot check: ' + msg);
+      socket.broadcast.emit('bot check', msg);
+    });
+    socket.on('accuse message', function(msg){
+      console.log('accuse message: ' + msg);
+      socket.broadcast.emit('accuse message', msg);
+    });
 });
 
 

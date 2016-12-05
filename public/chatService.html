@@ -24,14 +24,36 @@
     </p>
   <ul>
     <li>
-      <p>You need to within the time limit guess whether or not your opponent is a bot or a human</p>
+      <p>Survive for as long as you can. You get more time with correct checks and accusations</p>
+
     </li>
   </ul>
+    <p>
+      <b>Moves:</b>
+    </p>
+  <ul>
+    <li>
+      <p>SEND - Send a message to your opponent</p>
+    </li>
+    <li>
+      <p>BOT - Let the bot send a message for you</p>
+    </li>
+    <li>
+       <p>ACCUSE - Accuse the last message as being sent by a bot</p>
+    </li>
+    <li>
+       <p>CHECK - Check if someone actually caught the bot</p>
+    </li>
+  </ul>
+
       
   <div id="output" ></div>
     <div class="askContent">
       <input type="text" id="question" class="textbox" value=""/>
-      <input type="button" class="askButton" value="ASK" onclick="ask()"/>
+      <input type="button" class="askButton" value="SEND" onclick="ask()"/>
+      <input type="button" class="askButton" value="BOT" onclick="bot()"/>
+      <input type="button" class="askButton" value="ACCUSE" onclick="accuse()"/>
+      <input type="button" class="askButton" value="CHECK" onclick="check()"/>
     </div>
   </div>
 	<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
@@ -42,12 +64,40 @@
       };
   </script>
   <script>
+    var lastMessage = "";
+    var botCheck = "n";
+    var doubleCheck = "n";
+  </script>
+  <script>
     var socket = io();
+    
+    socket.on('bot check', function(msg) {
+        botCheck = msg;
+    });
+
+    socket.on('accuse message', function(msg){
+      var outMessage_1 = "Someone thinks they caught the bot.";
+      if (msg == "y"){
+        showOutput('accuseContent', outMessage_1);
+        $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+        document.getElementById('question').value = ''; 
+        doubleCheck = "y";
+      } else {
+        showOutput('accuseContent', outMessage_1);
+        $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+        document.getElementById('question').value = '';
+        doubleCheck = "n";  
+      }
+      socket.emit('bot check', "n");  
+    });
+    
     socket.on('chat message', function(msg){
+      lastMessage = msg;
       showOutput('answerContent', msg);
       $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
       document.getElementById('question').value = '';        
     });
+
   </script>
 	<script>
   // Set focus to the question box
@@ -74,17 +124,22 @@
   }
   
   // Posts a question to the url: /question and process the answer
-  function ask() { 
-	  
+  function ask() {
+	  lastMessage = "";
     var myQuestion = document.getElementById('question').value; 
 	  socket.emit('chat message', myQuestion);
+    socket.emit('bot check', "n");
     var questionEntity = {
       'question' : myQuestion
     };
 	  showOutput('questionContent', myQuestion);
     $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
     document.getElementById('question').value = '';
-    /*  
+  }
+  function bot() {
+    var questionEntity = {
+      'question' : lastMessage
+    };
     $.ajax({
       type : 'POST',
       data : questionEntity,
@@ -92,14 +147,15 @@
       url : '/question',
       success : function(r, msg) {
         if (r.answer !== undefined) {
-          showOutput('answerContent', r.answer); 
-          document.getElementById('question').focus();		
-		
+          socket.emit('chat message', r.answer);
+          socket.emit('bot check', "y");
+          showOutput('questionContent', r.answer); 
+          document.getElementById('question').focus();    
           $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
 
         } else {
-        	console.log('The response back was undefined');
-        	showOutput('answerContent', 'Sorry, I have no response to your question.');
+          console.log('The response back was undefined');
+          showOutput('questionContent', 'I have no response to that.');
         }
         },
           error : function(r, msg, e) {            
@@ -108,12 +164,38 @@
               errorText = e + ' ' + r.responseText;
             } else {
               errorText = e;
-            }            	
-			console.log(errorText);
-			showOutput('answerContent', 'Sorry, I am unable to respond to your question.');
+            }             
+      console.log(errorText);
+      showOutput('questionContent', 'Uh.');
           }
-    });	
-    */
+    });
+  } 
+  function accuse() {
+    var accuseMessage = "I think I caught the bot.";
+    showOutput('questionContent', accuseMessage);
+    $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+    document.getElementById('question').value = '';
+    if(botCheck == "y"){
+          socket.emit('accuse message', "y");
+    }else {
+          socket.emit('accuse message', "n");
+          showOutput('lostContent', "You thought wrong.");
+          $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+          document.getElementById('question').value = '';
+    }
+  }
+  function check() {
+    var checkMessage_1 = "They did not.";
+    var checkMessage_2 = "They did.";
+    if(doubleCheck == "y"){
+        showOutput('lostContent', checkMessage_2);
+        $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+        document.getElementById('question').value = ''; 
+    }else {
+        showOutput('lostContent', checkMessage_1);
+        $('html, body').animate({ scrollTop: $(document).height() }, 'slow'); 
+        document.getElementById('question').value = ''; 
+    }
   }
 
 </script>

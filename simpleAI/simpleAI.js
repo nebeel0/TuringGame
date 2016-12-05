@@ -29,7 +29,7 @@ exports.question = function(req, res) {
   
   // The default answer
   if (!response){
-    response = "I do not know the answer.";
+    response = "uh.";
   }
   
   var output = '{"answer":"'+ response + '"}';
