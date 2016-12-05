@@ -4,11 +4,11 @@
  */
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const logger = require('morgan');
 const dotenv = require('dotenv');
 const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 const passport = require('passport');
-const flash = require('express-flash');
 const errorHandler = require('errorhandler');
 const expressValidator = require('express-validator');
 
@@ -31,6 +31,13 @@ dotenv.load({ path: '.env.example' });
  */
 const userController = require('./controllers/user');
 
+
+/**
+ * API keys and Passport configuration.
+ */
+const passportConfig = require('./config/passport');
+
+
 /**
  * Connect to MongoDB.
  */
@@ -41,24 +48,16 @@ mongoose.connection.on('error', () => {
   process.exit();
 });
 
-// View Engine
-app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs({defaultLayout:'layout'}));
-app.set('view engine', 'handlebars');
-
-// Connect Flash
-app.use(flash());
-
-// all environments
+/**
+ * Express configuration.
+ */
 app.set('port', process.env.PORT || 3000);
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
-app.use(express.methodOverride());
-app.use(app.router);
 app.use(session({
   resave: true,
   saveUninitialized: true,
@@ -102,12 +101,22 @@ app.get("/", function (req,res){
   res.sendfile(pathname + "chatService.html");
 })
 */
-
-
+/**
+ * Primary app routes.
+ */
 
 app.get("/chatService", function (req,res){
-	res.sendfile(pathname + "chatService.html");
+  res.sendfile(pathname + "chatService.html");
 })
+app.get("/", function (req,res){
+  res.sendfile(pathname + "chatService.html");
+})
+
+app.get('/login', userController.getLogin);
+app.post('/login', userController.postLogin);
+app.get('/logout', userController.logout);
+app.get('/signup', userController.getSignup);
+app.post('/signup', userController.postSignup);
  
 io.on('connection', function(socket){
     console.log('a user connected');
